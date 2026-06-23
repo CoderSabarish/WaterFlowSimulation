@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Real-world applications of water flow simulation in pipe networks">
+  <title>Applications — FlowSim | Water Flow Simulation</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- ======================================== -->
+  <!-- THREE.JS BACKGROUND                      -->
+  <!-- ======================================== -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="bg-overlay"></div>
+
+  <!-- ======================================== -->
+  <!-- MAIN CONTENT                              -->
+  <!-- ======================================== -->
+  <div class="main-content">
+
+    <!-- Page Header -->
+    <div class="apps-header">
+      <div class="hero-badge">
+        <span>🌐</span>
+        <span>Real-World Impact</span>
+      </div>
+      <h1>Applications</h1>
+      <p>Pipe flow simulation is used across many critical industries and infrastructure systems worldwide.</p>
+    </div>
+
+    <!-- Application Cards Grid -->
+    <div class="apps-grid">
+
+      <!-- 1. Water Supply Systems -->
+      <div class="app-card" onclick="openModal(0)">
+        <span class="app-icon">💧</span>
+        <h3>Water Supply Systems</h3>
+        <p>Optimize municipal water distribution networks to ensure efficient delivery to homes, businesses, and public facilities.</p>
+        <span class="app-tag">Infrastructure</span>
+      </div>
+
+      <!-- 2. Irrigation Networks -->
+      <div class="app-card" onclick="openModal(1)">
+        <span class="app-icon">🌾</span>
+        <h3>Irrigation Networks</h3>
+        <p>Design and manage agricultural irrigation systems that distribute water efficiently across farmland and fields.</p>
+        <span class="app-tag">Agriculture</span>
+      </div>
+
+      <!-- 3. Oil & Gas Pipelines -->
+      <div class="app-card" onclick="openModal(2)">
+        <span class="app-icon">🛢️</span>
+        <h3>Oil & Gas Pipelines</h3>
+        <p>Simulate and monitor fluid transport in long-distance petroleum and natural gas pipeline networks.</p>
+        <span class="app-tag">Energy</span>
+      </div>
+
+      <!-- 4. Drainage Systems -->
+      <div class="app-card" onclick="openModal(3)">
+        <span class="app-icon">🚰</span>
+        <h3>Drainage Systems</h3>
+        <p>Model stormwater and sewage drainage networks to prevent flooding and ensure proper waste management.</p>
+        <span class="app-tag">Urban Planning</span>
+      </div>
+
+      <!-- 5. Firefighting Networks -->
+      <div class="app-card" onclick="openModal(4)">
+        <span class="app-icon">🚒</span>
+        <h3>Firefighting Networks</h3>
+        <p>Optimize hydrant placement and water pressure distribution for rapid emergency response and fire suppression.</p>
+        <span class="app-tag">Emergency Services</span>
+      </div>
+
+      <!-- 6. Smart Cities -->
+      <div class="app-card" onclick="openModal(5)">
+        <span class="app-icon">🏙️</span>
+        <h3>Smart Cities</h3>
+        <p>Integrate IoT sensors with pipe network simulations for real-time monitoring and AI-driven leak detection.</p>
+        <span class="app-tag">Technology</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ======================================== -->
+  <!-- MODAL POPUP                               -->
+  <!-- ======================================== -->
+  <div class="modal-overlay" id="app-modal">
+    <div class="modal-content" style="position: relative;">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-icon" style="font-size: 3rem; margin-bottom: 16px;"></div>
+      <h2 id="modal-title"></h2>
+      <p id="modal-desc" style="margin-top: 12px;"></p>
+      <div id="modal-details" style="margin-top: 20px;"></div>
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- SCRIPTS                                   -->
+  <!-- ======================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/js/background.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <!-- Auth check -->
+  <script>
+    (async () => {
+      await requireLogin();
+    })();
+  </script>
+
+  <!-- Application Modal Data -->
+  <script>
+    // =========================================
+    // MODAL DATA — Detailed info for each app
+    // =========================================
+    const applications = [
+      {
+        icon: '💧',
+        title: 'Water Supply Systems',
+        desc: 'Municipal water distribution is one of the most critical infrastructure systems in any city. Pipe flow simulation helps engineers:',
+        details: `
+          <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 2; padding-left: 18px;">
+            <li>Predict water pressure at different points in the network</li>
+            <li>Identify bottlenecks where flow is restricted</li>
+            <li>Plan expansion of water mains for new developments</li>
+            <li>Optimize pump station placement and sizing</li>
+            <li>Detect potential leak locations using flow analysis</li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.8rem;">
+            <strong style="color: var(--neon-cyan);">Data Structure Used:</strong> 
+            Graph (Adjacency List) — nodes represent junctions, edges represent pipes
+          </p>
+        `
+      },
+      {
+        icon: '🌾',
+        title: 'Irrigation Networks',
+        desc: 'Modern agriculture relies on efficient water distribution. Flow simulation enables:',
+        details: `
+          <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 2; padding-left: 18px;">
+            <li>Equal water distribution across large farmland areas</li>
+            <li>Drip irrigation system design and optimization</li>
+            <li>Minimizing water waste through optimal pipe routing</li>
+            <li>Scheduling water flow based on crop requirements</li>
+            <li>Managing canal-to-pipe transitions in rural systems</li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.8rem;">
+            <strong style="color: var(--neon-cyan);">Algorithm Used:</strong> 
+            Dijkstra's Algorithm — finds shortest-time path to deliver water
+          </p>
+        `
+      },
+      {
+        icon: '🛢️',
+        title: 'Oil & Gas Pipelines',
+        desc: 'The petroleum industry uses extensive pipeline networks spanning thousands of kilometers:',
+        details: `
+          <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 2; padding-left: 18px;">
+            <li>Real-time monitoring of flow rates and pressures</li>
+            <li>Leak detection through flow discrepancy analysis</li>
+            <li>Optimization of pipeline routing across terrain</li>
+            <li>Multi-phase flow simulation (oil, gas, water mixtures)</li>
+            <li>Emergency shutdown and rerouting planning</li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.8rem;">
+            <strong style="color: var(--neon-cyan);">Key Formula:</strong> 
+            Time = Length ÷ Velocity — used to calculate flow duration
+          </p>
+        `
+      },
+      {
+        icon: '🚰',
+        title: 'Drainage Systems',
+        desc: 'Urban drainage networks prevent flooding and manage wastewater:',
+        details: `
+          <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 2; padding-left: 18px;">
+            <li>Stormwater runoff management during heavy rainfall</li>
+            <li>Sewage collection and treatment plant routing</li>
+            <li>Flood risk assessment using network capacity analysis</li>
+            <li>Combined sewer overflow prevention</li>
+            <li>Green infrastructure integration (rain gardens, bioswales)</li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.8rem;">
+            <strong style="color: var(--neon-cyan);">Data Structure:</strong> 
+            Directed Graph — water flows downhill following gravity
+          </p>
+        `
+      },
+      {
+        icon: '🚒',
+        title: 'Firefighting Networks',
+        desc: 'Fire suppression depends on reliable water supply networks:',
+        details: `
+          <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 2; padding-left: 18px;">
+            <li>Optimal hydrant placement for maximum area coverage</li>
+            <li>Water pressure analysis during peak demand</li>
+            <li>Emergency routing for fastest water delivery</li>
+            <li>Backup supply path planning for system failures</li>
+            <li>Sprinkler system design for commercial buildings</li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.8rem;">
+            <strong style="color: var(--neon-cyan);">Application:</strong> 
+            Shortest path algorithm ensures minimum response time
+          </p>
+        `
+      },
+      {
+        icon: '🏙️',
+        title: 'Smart Cities',
+        desc: 'Next-generation urban water management integrates technology:',
+        details: `
+          <ul style="color: var(--text-secondary); font-size: 0.88rem; line-height: 2; padding-left: 18px;">
+            <li>IoT sensor networks for real-time flow monitoring</li>
+            <li>AI-driven predictive maintenance and leak detection</li>
+            <li>Digital twin simulation of entire city water networks</li>
+            <li>Automated valve control based on demand patterns</li>
+            <li>Integration with smart meters for usage analytics</li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--text-muted); font-size: 0.8rem;">
+            <strong style="color: var(--neon-cyan);">Future Tech:</strong> 
+            Combines graph algorithms with machine learning for optimization
+          </p>
+        `
+      }
+    ];
+
+    // =========================================
+    // MODAL OPEN / CLOSE FUNCTIONS
+    // =========================================
+    function openModal(index) {
+      const app = applications[index];
+      document.getElementById('modal-icon').textContent = app.icon;
+      document.getElementById('modal-title').textContent = app.title;
+      document.getElementById('modal-desc').textContent = app.desc;
+      document.getElementById('modal-details').innerHTML = app.details;
+      document.getElementById('app-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('app-modal').classList.remove('active');
+    }
+
+    // Close modal on overlay click
+    document.getElementById('app-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>

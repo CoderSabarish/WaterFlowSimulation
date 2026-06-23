@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Admin Dashboard — Manage pipe networks for water flow simulation">
+  <title>Admin Dashboard — FlowSim</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <!-- ======================================== -->
+  <!-- THREE.JS BACKGROUND                      -->
+  <!-- ======================================== -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="bg-overlay"></div>
+
+  <!-- ======================================== -->
+  <!-- MAIN CONTENT — 2-Column Admin Layout     -->
+  <!-- ======================================== -->
+  <div class="main-content">
+    <div class="admin-layout">
+
+      <!-- ============================= -->
+      <!-- LEFT — Add Pipe Form          -->
+      <!-- ============================= -->
+      <div>
+        <div class="glass-card admin-form-card">
+          <h2>➕ Add Pipe Connection</h2>
+
+          <form id="pipe-form" autocomplete="off">
+            <!-- Node A and Node B side by side -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="input-nodeA">Node A</label>
+                <input type="text" id="input-nodeA" class="form-input" placeholder="e.g. A" required maxlength="10">
+              </div>
+              <div class="form-group">
+                <label for="input-nodeB">Node B</label>
+                <input type="text" id="input-nodeB" class="form-input" placeholder="e.g. B" required maxlength="10">
+              </div>
+            </div>
+
+            <!-- Length and Velocity side by side -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="input-length">Length (meters)</label>
+                <input type="number" id="input-length" class="form-input" placeholder="e.g. 100" required min="0.1"
+                  step="any">
+              </div>
+              <div class="form-group">
+                <label for="input-velocity">Velocity (m/s)</label>
+                <input type="number" id="input-velocity" class="form-input" placeholder="e.g. 5" required min="0.1"
+                  step="any">
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-success" style="width: 100%; margin-top: 8px;">
+              ➕ Add Pipe
+            </button>
+          </form>
+        </div>
+
+        <!-- Info Card -->
+        <div class="glass-card" style="margin-top: 20px;">
+          <h2>ℹ️ Admin Guide</h2>
+          <ul style="color: var(--text-secondary); font-size: 0.85rem; line-height: 2; padding-left: 16px;">
+            <li>Nodes are automatically capitalized (e.g. "a" → "A")</li>
+            <li>Pipes are bidirectional (A→B also creates B→A)</li>
+            <li>Time is calculated as <strong style="color:var(--neon-cyan);">Length ÷ Velocity</strong></li>
+            <li>Users can view and simulate but cannot modify data</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- RIGHT — Stats + Pipe Table    -->
+      <!-- ============================= -->
+      <div>
+        <!-- Statistics Cards -->
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-pipes">-</div>
+            <div class="stat-label">Total Pipes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-nodes">-</div>
+            <div class="stat-label">Total Nodes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-avg-time">-</div>
+            <div class="stat-label">Avg. Time</div>
+          </div>
+        </div>
+
+        <!-- Pipe Table -->
+        <div class="glass-card">
+          <h2>🔧 Pipe Network Database</h2>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Node A</th>
+                  <th>Node B</th>
+                  <th>Length</th>
+                  <th>Velocity</th>
+                  <th>Time</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-pipe-table-body">
+                <tr>
+                  <td colspan="6" style="text-align:center; padding:32px; color:var(--text-muted);">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Loading pipe data...</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- SCRIPTS                                   -->
+  <!-- ======================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/js/background.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <!-- Admin-only auth check -->
+  <script>
+    (async () => {
+      await requireAdminLogin();
+    })();
+  </script>
+
+  <!-- Admin CRUD operations -->
+  <script src="/js/admin.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simulate water flow through pipe networks using Dijkstra's Algorithm">
+  <title>Simulation — FlowSim | Water Flow Simulation</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <!-- ======================================== -->
+  <!-- THREE.JS BACKGROUND                      -->
+  <!-- ======================================== -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="bg-overlay"></div>
+
+  <!-- ======================================== -->
+  <!-- MAIN CONTENT — 3-Column Layout           -->
+  <!-- ======================================== -->
+  <div class="main-content">
+    <div class="sim-layout">
+
+      <!-- ============================= -->
+      <!-- LEFT PANEL — Pipe Network     -->
+      <!-- ============================= -->
+      <div class="sim-panel">
+        <h2>📋 Pipe Network</h2>
+
+        <!-- Pipe Table -->
+        <table class="pipe-table">
+          <thead>
+            <tr>
+              <th>From</th>
+              <th>To</th>
+              <th>Length</th>
+              <th>Speed</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="pipe-table-body">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">
+                <div class="spinner"></div>
+                <div class="loading-text">Loading pipes...</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Simulation Controls -->
+        <div class="sim-controls">
+          <h2 style="border-top: none; padding-top: 0;">🎯 Run Simulation</h2>
+
+          <div class="form-group">
+            <label for="source-select">Source Node</label>
+            <select id="source-select" class="form-input">
+              <option value="">Loading...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="dest-select">Destination Node</label>
+            <select id="dest-select" class="form-input">
+              <option value="">Loading...</option>
+            </select>
+          </div>
+
+          <button id="run-simulation" class="btn btn-primary">
+            🚀 Run Simulation
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================= -->
+      <!-- CENTER — Graph Canvas         -->
+      <!-- ============================= -->
+      <div class="canvas-container" id="canvas-container">
+        <canvas id="sim-canvas"></canvas>
+      </div>
+
+      <!-- ============================= -->
+      <!-- RIGHT PANEL — Results         -->
+      <!-- ============================= -->
+      <div class="sim-panel">
+        <h2>📊 Simulation Results</h2>
+
+        <div id="results-panel">
+          <div class="empty-state">
+            <div class="empty-icon">🚰</div>
+            <p>Select source & destination<br>then click <strong>"Run Simulation"</strong></p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- SCRIPTS                                   -->
+  <!-- ======================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/js/background.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <!-- Auth check — must be logged in -->
+  <script>
+    (async () => {
+      await requireLogin();
+    })();
+  </script>
+
+  <!-- Simulation engine (loads after auth check) -->
+  <script src="/js/simulation.js"></script>
+
+</body>
+
+</html>

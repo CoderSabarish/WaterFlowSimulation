@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login to FlowSim — Water Flow Simulation using Data Structures">
+  <title>Login — FlowSim | Water Flow Simulation</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <!-- ======================================== -->
+  <!-- THREE.JS ANIMATED BACKGROUND             -->
+  <!-- ======================================== -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="bg-overlay"></div>
+
+  <!-- ======================================== -->
+  <!-- LOGIN FORM                                -->
+  <!-- ======================================== -->
+  <div class="login-wrapper">
+    <div class="login-card" id="login-card">
+      <!-- Animated Water Icon -->
+      <div class="login-icon">💧</div>
+
+      <!-- Title -->
+      <h1>FlowSim</h1>
+      <p class="login-subtitle">Water Flow Simulation — Login to Continue</p>
+
+      <!-- Login Form -->
+      <form id="login-form" autocomplete="off">
+        <!-- Username -->
+        <div class="form-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" class="form-input" placeholder="Enter your username" required
+            autofocus>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="form-group">
+          <label for="login-role">Login As</label>
+          <select id="login-role" class="form-input" required>
+            <option value="">Select a role...</option>
+            <option value="user">👤 User</option>
+            <option value="admin">👑 Admin</option>
+          </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="login-btn" class="btn btn-primary">
+          🔐 Login
+        </button>
+      </form>
+
+      <!-- Default Credentials Hint -->
+      <div style="margin-top: 24px; text-align: center; font-size: 0.75rem; color: var(--text-muted);">
+        <p>Default accounts:</p>
+        <p style="color: var(--text-secondary);">
+          Admin: <strong>admin</strong> / <strong>admin123</strong><br>
+          User: <strong>user</strong> / <strong>user123</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================== -->
+  <!-- TOAST CONTAINER                          -->
+  <!-- ======================================== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ======================================== -->
+  <!-- SCRIPTS                                   -->
+  <!-- ======================================== -->
+  <!-- Three.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Background animation -->
+  <script src="/js/background.js"></script>
+  <!-- Auth helpers (for toast function) -->
+  <script src="/js/auth.js"></script>
+
+  <!-- Login Logic -->
+  <script>
+    // =========================================
+    // LOGIN FORM HANDLER
+    // =========================================
+
+    const loginForm = document.getElementById('login-form');
+    const loginBtn = document.getElementById('login-btn');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();  // Prevent page reload
+
+      // Get form values
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      const role = document.getElementById('login-role').value;
+
+      // Basic validation
+      if (!username || !password || !role) {
+        showToast('Please fill in all fields', 'error');
+        return;
+      }
+
+      // Disable button while loading
+      loginBtn.disabled = true;
+      loginBtn.textContent = '⏳ Logging in...';
+
+      try {
+        // Send login request to server
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, role })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          // Login failed
+          throw new Error(data.error || 'Login failed');
+        }
+
+        // Login successful!
+        showToast(`Welcome, ${data.user.username}!`, 'success');
+
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+          window.location.href = '/home.html';
+        }, 1000);
+
+      } catch (error) {
+        showToast(error.message, 'error');
+        loginBtn.disabled = false;
+        loginBtn.textContent = '🔐 Login';
+      }
+    });
+
+    // =========================================
+    // REDIRECT IF ALREADY LOGGED IN
+    // =========================================
+    (async () => {
+      const session = await checkSession();
+      if (session.loggedIn) {
+        window.location.href = '/home.html';
+      }
+    })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="FlowSim — Simulate water flow through pipe networks using Dijkstra's Algorithm and graph data structures.">
+  <title>Home — FlowSim | Water Flow Simulation</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <!-- ======================================== -->
+  <!-- THREE.JS BACKGROUND                      -->
+  <!-- ======================================== -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="bg-overlay"></div>
+
+  <!-- ======================================== -->
+  <!-- MAIN CONTENT                              -->
+  <!-- ======================================== -->
+  <div class="main-content">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span>🔬</span>
+        <span>Data Structures Project</span>
+      </div>
+
+      <h1>Simulation of Water<br>Flow in Pipes</h1>
+
+      <p>
+        Visualize water flowing through pipe networks using
+        <strong>Graph data structures</strong> and
+        <strong>Dijkstra's Algorithm</strong>.
+        Build networks, find shortest paths, and watch the flow animate in real-time.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/simulation.html" class="btn btn-primary" style="width: auto; padding: 14px 32px;">
+          🚀 Run Simulation
+        </a>
+        <a href="/applications.html" class="btn btn-secondary" style="padding: 14px 32px;">
+          📚 View Applications
+        </a>
+      </div>
+    </section>
+
+    <!-- Feature Cards -->
+    <section class="container">
+      <div class="features-grid">
+
+        <!-- Feature 1: Graph Data Structure -->
+        <div class="feature-card">
+          <div class="feature-icon">🔗</div>
+          <h3>Graph (Adjacency List)</h3>
+          <p>
+            Pipe networks are represented as weighted undirected graphs
+            using an adjacency list. Each edge stores length and velocity.
+          </p>
+        </div>
+
+        <!-- Feature 2: Dijkstra's Algorithm -->
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Dijkstra's Algorithm</h3>
+          <p>
+            Finds the shortest-time path using a priority queue.
+            Edge weight = Time = Length ÷ Velocity for each pipe segment.
+          </p>
+        </div>
+
+        <!-- Feature 3: Animated Visualization -->
+        <div class="feature-card">
+          <div class="feature-icon">💧</div>
+          <h3>Water Flow Animation</h3>
+          <p>
+            Watch animated water particles flow along the computed shortest path
+            with glowing neon effects on an interactive canvas.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="container" style="max-width: 800px; margin-top: 40px;">
+      <div class="glass-card" style="text-align: center;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 20px;">⚙️ How It Works</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+          <div style="padding: 16px;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">1️⃣</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              <strong style="color: var(--text-primary);">Build Network</strong><br>
+              Add pipe connections with length and velocity
+            </p>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">2️⃣</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              <strong style="color: var(--text-primary);">Select Nodes</strong><br>
+              Choose source and destination nodes
+            </p>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">3️⃣</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              <strong style="color: var(--text-primary);">Run Dijkstra</strong><br>
+              Algorithm finds the fastest path
+            </p>
+          </div>
+          <div style="padding: 16px;">
+            <div style="font-size: 2rem; margin-bottom: 8px;">4️⃣</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              <strong style="color: var(--text-primary);">Animate Flow</strong><br>
+              Watch water particles travel the path
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- User Info -->
+    <section class="container" style="max-width: 600px; text-align: center; padding-bottom: 60px;">
+      <div id="user-welcome" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 20px;"></div>
+    </section>
+
+  </div>
+
+  <!-- ======================================== -->
+  <!-- SCRIPTS                                   -->
+  <!-- ======================================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/js/background.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/nav.js"></script>
+
+  <script>
+    // Check login and show welcome message
+    (async () => {
+      const user = await requireLogin();
+      if (user) {
+        document.getElementById('user-welcome').innerHTML =
+          `Logged in as <strong style="color: var(--neon-cyan);">${user.username}</strong> 
+           (${user.role === 'admin' ? '👑 Admin' : '👤 User'})`;
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
